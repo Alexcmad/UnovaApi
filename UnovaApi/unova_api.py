@@ -12,6 +12,8 @@ from UnovaApi import unoSession
 from twocaptcha import TwoCaptcha
 import requests
 import lxml
+from importlib import resources
+import io
 
 key = "fd2d4f222211e317c6a77c7b02d69f78"
 solver = TwoCaptcha(key)
@@ -42,15 +44,15 @@ def grab_team(page):
 
 
 def shop():
-    with open("item_data.csv") as f:
+    with resources.open_text("UnovaApi","item_data.csv") as f:
         file = csv.reader(f)
         return {row[1]: row[3] for row in file}
 
 
 def adoption_center():
-    with open("adoption_data.csv") as f:
+    with resources.open_text("UnovaApi", "adoption_data.csv") as f:
         file = csv.reader(f)
-        return [row[0] for row in file]
+        return [row[1] for row in file]
 
 
 class Client:
