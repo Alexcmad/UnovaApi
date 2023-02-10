@@ -33,11 +33,13 @@ client.player_info(username)
 - Accepts a string for the username of the player whose profile you wish to view
 - If no argument is passed it will default to the user's profile
 - Returns a dictionary with the player information
+- Returns None if the username is not found
 
 client.view_team(username)
 - Accepts a string for the username of the player whose team you wish to view
 - If no argument is passed it will default to the user's profile
 - Returns a list of dictionaries each with a pokemon's information (Name, Level, Sprite)
+- Returns None if the username is not found
 
 client.battle_team()
 - Returns a list of a more detailed dictionary of the user's team.
@@ -45,12 +47,13 @@ client.battle_team()
 
 client.heal_team()
 - Heals all your pokemon to full health
+- returns 'heal finished'
 
-client.adopt(pokemon_name)
+client.adopt(pokemonName)
 - Accepts a string of the pokemon you wish to adopt
 - All adoptions cast IC$35,000
 - All adopted pokemon are level 15
-- Returns pokemon_name for a successfull adoption and None for a failiure
+- Returns pokemonName for a successfull adoption and None for a failiure
 
 client.view_items()
 - Returns a list of dictionaries each with an items information (Name, Quantity)
@@ -77,7 +80,9 @@ client.send_message(subject, username, message, captcha)
 - Accepts an integer for the captcha mode (default: 1)
 - Returns a dictionary with information about the message
 - Returns None if the username cannot be found
-- If 0 is passed as the captcha mode the user will be prompted to solve a captcha that will be downloaded to disk
+- If 0 is passed as the captcha mode the program will attempt to draw the captcha in terminal and prompt the user to solve it
+
+(All message related changes may take a while to reflect)
 
 client.send_money(username, quantity, captcha)
 - Accepts a string for the username
@@ -87,7 +92,16 @@ client.send_money(username, quantity, captcha)
 - Returns None if the username cannot be found
 - Returns 0 if the quantity is less than 100
 - Returns -1 if the quantity is greater than the balance of the user
-- If 0 is passed as the captcha mode the user will be prompted to solve a captcha that will be downloaded to disk
+- If 0 is passed as the captcha mode the program will attempt to draw the captcha in terminal and prompt the user to solve it
+```
+
+## Other mehthods:
+```
+unovaApi.shop()
+- Returns a list of all the shop items
+
+unovaApi.adoption_center()
+- Returns a list of all pokemon available for adoption
 ```
 
 # Demo
