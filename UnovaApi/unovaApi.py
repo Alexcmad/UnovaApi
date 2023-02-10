@@ -8,7 +8,7 @@ from UnovaApi.Exceptions import *
 import csv
 from bs4 import BeautifulSoup
 import requests
-import unoSession
+from UnovaApi import unoSession
 from twocaptcha import TwoCaptcha
 import requests
 import lxml
@@ -18,6 +18,7 @@ solver = TwoCaptcha(key)
 
 options = Options()
 options.add_argument("--headless")
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 
 def grab_team(page):
