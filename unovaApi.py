@@ -2,6 +2,8 @@ import time
 import warnings
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
+import drawCaptchas
 from Exceptions import *
 import csv
 from bs4 import BeautifulSoup
@@ -22,7 +24,7 @@ def grab_team(page):
     try:
         team = page.find(class_="bt-pokemon-list").find_all('li')
     except AttributeError:
-        return "Player not found"
+        return None
 
     poke_list = []
     for pokemon in team:
@@ -38,11 +40,16 @@ def grab_team(page):
     return poke_list
 
 
-def show_shop():
+def shop():
     with open("item_data.csv") as f:
         file = csv.reader(f)
-        for row in file:
-            print(f"{row[1]}: {row[3]}")
+        return {row[1]: row[3] for row in file}
+
+
+def adoption_center():
+    with open("adoption_data.csv") as f:
+        file = csv.reader(f)
+        return [row[0] for row in file]
 
 
 class Client:
@@ -113,7 +120,7 @@ class Client:
             player = self.__find_player(self.username)
 
         if player == -1:
-            return "Player not found"
+            return None
         tables = player.find_all(class_="memberPanelTable")
         member_panel_table = tables[0]
         ls = member_panel_table.text.strip().split("\n")
@@ -151,22 +158,21 @@ class Client:
                        "xjxargs[]": f"S{username}"}
             for i in range(2):
                 requests.post("https://www.unovarpg.com/search_trainer.php", data=payload, cookies=self.__cookies)
-            print(f"{username} is now your friend")
 
     def send_money(self, username: str, quantity: float, captcha=1):
         if self.__find_player(username) == -1:
             print("User not found")
-            return
+            return None
         if type(quantity) not in (int, float):
             raise TypeError('Quantity must be a numeric value')
         elif quantity < 100:
             print("Quantity must be >= 100")
-            return
+            return 0
         amt_to_send = round((100 / 85) * quantity, 2)
         bal = self.check_balance()
         if amt_to_send > bal:
             print(f"Not enough money in your account\nYour balance: {bal}\nAmount to send (+tax): {amt_to_send}")
-            return
+            return -1
 
         driver = webdriver.Chrome(options=options)
         driver.get("https://www.unovarpg.com/notfound")
@@ -184,6 +190,7 @@ class Client:
         if captcha:
             ans = solver.normal("captcha.png", minLen=5, maxLen=5)['code'].lower()
         else:
+            drawCaptchas.draw_image("captcha.png", 40, 141)
             ans = input("Solve the Captcha: ")
         print(ans)
         print(f"Captcha Solved.\n{username} received IC${quantity} and you lost IC${amt_to_send} due to tax")
@@ -195,11 +202,12 @@ class Client:
         requests.post("https://www.unovarpg.com/indigo_bank.php?doTransaction", data=payload, cookies=self.__cookies)
         self.__member_panel = BeautifulSoup(requests.get("https://www.unovarpg.com/member_panel.php",
                                                          cookies=self.__cookies).content, 'html.parser')
+        return amt_to_send
 
-    def send_message(self, username: str, subject: str, message: str, captcha = 1):
+    def send_message(self, username: str, subject: str, message: str, captcha=1):
         if self.__find_player(username) == -1:
             print("User not found")
-            return
+            return None
 
         driver = webdriver.Chrome(options=options)
         driver.get("https://www.unovarpg.com/notfound")
@@ -217,6 +225,7 @@ class Client:
         if captcha:
             ans = solver.normal("captcha.png", minLen=5, maxLen=5)['code'].lower()
         else:
+            drawCaptchas.draw_image("captcha.png", 40, 141)
             ans = input("Solve the Captcha: ")
         print(ans)
         if ans == 'subject':
@@ -230,6 +239,8 @@ class Client:
             "message": message
         }
         requests.post("https://www.unovarpg.com/write_message.php?doSend", data=payload, cookies=self.__cookies)
+
+        return payload
 
     def check_balance(self):
         balance = self.__member_panel.find(class_="memberPanelTable").find('div').text.strip(). \
@@ -256,8 +267,8 @@ class Client:
             messages.append(data)
 
         if index == -1:
-
-            return f"You have {len(messages)} Messages"
+            print(f"You have {len(messages)} Messages")
+            return len(messages)
 
         elif index > -1 and action == 'open':
             msg = messages[index]
@@ -277,7 +288,7 @@ class Client:
             requests.post("https://www.unovarpg.com/member_panel.php", cookies=self.__cookies, data=payload)
             time.sleep(.5)
             self.__member_panel = requests.get("https://www.unovarpg.com/member_panel.php", cookies=self.__cookies)
-            return "Message Deleted"
+            return 1
 
     def adopt(self, pokemonName: str):
 
@@ -291,14 +302,14 @@ class Client:
             data = {f"item[{pkID}]": '1'}
         except UnboundLocalError:
             print("Pokemon Not Found in Adoption Center")
-            return
+            return None
         with requests.Session() as session:
             purchase = session.post("https://www.unovarpg.com/adoption_center.php?doBuy", cookies=self.__cookies,
                                     data=data)
             self.__member_panel = BeautifulSoup(requests.get("https://www.unovarpg.com/member_panel.php",
                                                              cookies=self.__cookies).content, 'lxml')
 
-            return f"You adopted a {pokemonName}(lv.15) for IC$35,000!"
+            return pokemonName
 
     def battle_team(self):
         payload = {
