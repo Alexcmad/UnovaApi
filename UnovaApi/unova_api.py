@@ -160,7 +160,7 @@ class Client:
             for i in range(2):
                 requests.post("https://www.unovarpg.com/search_trainer.php", data=payload, cookies=self.__cookies)
 
-    def send_money(self, username: str, quantity: float, captcha=1):
+    def send_money(self, username: str, quantity: float, captcha=0):
         if self.__find_player(username) == -1:
             print("User not found")
             return None
@@ -205,7 +205,7 @@ class Client:
                                                          cookies=self.__cookies).content, 'html.parser')
         return amt_to_send
 
-    def send_message(self, username: str, subject: str, message: str, captcha=1):
+    def send_message(self, username: str, subject: str, message: str, captcha=0):
         if self.__find_player(username) == -1:
             print("User not found")
             return None
