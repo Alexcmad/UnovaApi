@@ -20,10 +20,15 @@ UnovaApi is a comprehensive platform for Pokemon trainers in the Unova region. W
 - **Delete Messages**: Delete messages you no longer need.
 
 ## Getting Started:
+**Download the package with pip**:
+```
+pip install UnovaApi
+```
+
 **Log into your UnovaRpg account with the client:**
 ```
-from unovaApi import Client
-client = Client(username,password)
+from UnovaApi import unova_api
+client = unova_api.Client(username,password)
 - Returns the username for a successful login. Raises an Exception for a failed login.
 - Login can fail due to incorrect deails or due to your whole team being fainted.
 ```
@@ -81,18 +86,20 @@ client.send_message(subject, username, message, captcha)
 - Returns a dictionary with information about the message
 - Returns None if the username cannot be found
 - If 0 is passed as the captcha mode the program will attempt to draw the captcha in terminal and prompt the user to solve it
+- If 1 is passed as the captcha mode the program will attempt to solve the captcha automatically (unstable)
 
 (All message related changes may take a while to reflect)
 
 client.send_money(username, quantity, captcha)
 - Accepts a string for the username
 - Accepts an integer for the quantity
-- Accepts an integer for the captcha mode (default: 1)
+- Accepts an integer for the captcha mode (default: 0)
 - Returns the amount taken from your account
 - Returns None if the username cannot be found
 - Returns 0 if the quantity is less than 100
 - Returns -1 if the quantity is greater than the balance of the user
 - If 0 is passed as the captcha mode the program will attempt to draw the captcha in terminal and prompt the user to solve it
+- If 1 is passed as the captcha mode the program will attempt to solve the captcha automatically (unstable)
 ```
 
 ## Other mehthods:
@@ -104,7 +111,11 @@ unovaApi.adoption_center()
 - Returns a list of all pokemon available for adoption
 ```
 
-# Demo
+# Demo (outdated)
 https://user-images.githubusercontent.com/113714949/218002943-bb41a6b0-305b-4882-9a29-b5018b5b20db.mov
+
+# Other links
+## pypi:
+- https://pypi.org/project/UnovaApi/
 
 
