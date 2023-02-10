@@ -11,9 +11,10 @@ def draw_image(image_path, height, width, threshold=165):
     characters = " `^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
     characters = characters[::-1]
     for row in pixels:
-        for pixel in row:
-            if pixel > threshold:
-                pixel = 255
-            char = characters[int(pixel / 255 * (len(characters) - 1))]
-            print(char, end="")
-        print()
+        if any(isinstance(e, int) and e < threshold for e in row):
+            for pixel in row:
+                if pixel > threshold:
+                    pixel = 255
+                char = characters[int(pixel / 255 * (len(characters) - 1))]
+                print(char, end="")
+            print()
