@@ -111,6 +111,9 @@ unovaApi.adoption_center()
 - Returns a list of all pokemon available for adoption
 ```
 
+# Requires:
+- Latest version of chrome
+
 # Demo (outdated)
 https://user-images.githubusercontent.com/113714949/218002943-bb41a6b0-305b-4882-9a29-b5018b5b20db.mov
 
