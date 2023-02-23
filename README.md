@@ -28,57 +28,68 @@ pip install UnovaApi
 **Log into your UnovaRpg account with the client:**
 ```
 from UnovaApi import unova_api
+```
 client = unova_api.Client(username,password)
 - Returns the username for a successful login. Raises an Exception for a failed login.
 - Login can fail due to incorrect deails or due to your whole team being fainted.
-```
+
 ## Client methods:
 ```
 client.player_info(username)
+```
 - Accepts a string for the username of the player whose profile you wish to view
 - If no argument is passed it will default to the user's profile
 - Returns a dictionary with the player information
 - Returns None if the username is not found
-
+```
 client.view_team(username)
+```
 - Accepts a string for the username of the player whose team you wish to view
 - If no argument is passed it will default to the user's profile
 - Returns a list of dictionaries each with a pokemon's information (Name, Level, Sprite)
 - Returns None if the username is not found
-
+```
 client.battle_team()
+```
 - Returns a list of a more detailed dictionary of the user's team.
 - Includes HP, Level, Status, Available evlolution, Held items, etc.
-
+```
 client.heal_team()
+```
 - Heals all your pokemon to full health
 - returns 'heal finished'
-
+```
 client.adopt(pokemonName)
+```
 - Accepts a string of the pokemon you wish to adopt
 - All adoptions cast IC$35,000
 - All adopted pokemon are level 15
 - Returns pokemonName for a successfull adoption and None for a failiure
-
+```
 client.view_items()
+```
 - Returns a list of dictionaries each with an items information (Name, Quantity)
-
+```
 client.buy_item(item_name, quantity)
+```
 - Accepts a string for the item name and an integer for the quantity of items to purchase
 - Returns 0 item_name for a successful purchase and None for a faliure
-
+```
 client.check_balance()
+```
 - Returns an integer of the user's balance
-
+```
 client.messages(index, action)
+```
 - Accepts an integer for the index
 - Accepts a string (either 'open' or 'delete') for the action
 - Default action is 'open'
 - Returns the ammount of messages if no index is passed
 - Returns a dictionary of the message details if 'open' is passed
 - Returns 1 if 'delete' is passed
-
+```
 client.send_message(subject, username, message, captcha)
+```
 - Accepts a string for the subject of the message
 - Accepts a string for the username
 - Accepts a string for the message content
@@ -87,10 +98,10 @@ client.send_message(subject, username, message, captcha)
 - Returns None if the username cannot be found
 - If 0 is passed as the captcha mode the program will attempt to draw the captcha in terminal and prompt the user to solve it
 - If 1 is passed as the captcha mode the program will attempt to solve the captcha automatically (unstable)
-
 (All message related changes may take a while to reflect)
-
+```
 client.send_money(username, quantity, captcha)
+```
 - Accepts a string for the username
 - Accepts an integer for the quantity
 - Accepts an integer for the captcha mode (default: 0)
@@ -100,16 +111,18 @@ client.send_money(username, quantity, captcha)
 - Returns -1 if the quantity is greater than the balance of the user
 - If 0 is passed as the captcha mode the program will attempt to draw the captcha in terminal and prompt the user to solve it
 - If 1 is passed as the captcha mode the program will attempt to solve the captcha automatically (unstable)
-```
+
 
 ## Other mehthods:
 ```
 unovaApi.shop()
-- Returns a list of all the shop items
-
-unovaApi.adoption_center()
-- Returns a list of all pokemon available for adoption
 ```
+- Returns a list of all the shop items
+```
+unovaApi.adoption_center()
+```
+- Returns a list of all pokemon available for adoption
+
 
 # Requires:
 - Latest version of chrome
