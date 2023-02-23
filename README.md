@@ -28,8 +28,8 @@ pip install UnovaApi
 **Log into your UnovaRpg account with the client:**
 ```
 from UnovaApi import unova_api
-```
 client = unova_api.Client(username,password)
+```
 - Returns the username for a successful login. Raises an Exception for a failed login.
 - Login can fail due to incorrect deails or due to your whole team being fainted.
 
